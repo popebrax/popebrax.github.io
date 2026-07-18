@@ -415,16 +415,23 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:'Inter',sys
 
 <script>
 (function(){
-// ============================================
-// BACKGROUND PARTICLE FIELD (Three.js)
-// ============================================
+// Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+let isDark = true;
+themeToggle.addEventListener('click', () => {
+  isDark = !isDark;
+  if (isDark) { html.removeAttribute('data-theme'); themeToggle.classList.remove('active'); }
+  else { html.setAttribute('data-theme', 'light'); themeToggle.classList.add('active'); }
+});
+
+// Three.js Background
 const bgCanvas=document.getElementById('three-canvas');
 const bgScene=new THREE.Scene();
 const bgCamera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
 const bgRenderer=new THREE.WebGLRenderer({canvas:bgCanvas,alpha:true,antialias:true});
 bgRenderer.setSize(window.innerWidth,window.innerHeight);
 bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-
 const particleCount=120;
 const positions=new Float32Array(particleCount*3);
 const velocities=[];
@@ -440,13 +447,11 @@ const bgMaterial=new THREE.PointsMaterial({color:0xc9a96e,size:0.025,transparent
 const bgParticles=new THREE.Points(bgGeometry,bgMaterial);
 bgScene.add(bgParticles);
 bgCamera.position.z=5;
-
 let bgMouseX=0,bgMouseY=0;
 document.addEventListener('mousemove',(e)=>{
   bgMouseX=(e.clientX/window.innerWidth-0.5)*2;
   bgMouseY=(e.clientY/window.innerHeight-0.5)*2;
 });
-
 function animateBg(){
   requestAnimationFrame(animateBg);
   const posArray=bgGeometry.attributes.position.array;
@@ -467,59 +472,44 @@ function animateBg(){
   bgRenderer.render(bgScene,bgCamera);
 }
 animateBg();
-
 window.addEventListener('resize',()=>{
   bgCamera.aspect=window.innerWidth/window.innerHeight;
   bgCamera.updateProjectionMatrix();
   bgRenderer.setSize(window.innerWidth,window.innerHeight);
 });
 
-// ============================================
-// CSS 3D AVATAR SIMULATION (2D image with depth effects)
-// ============================================
+// Avatar 3D Simulation
 const avatarWrap = document.getElementById('avatarWrap');
 const avatar3d = document.getElementById('avatar3d');
-const avatarImg = document.getElementById('avatarImg');
-
-// Smooth tilt following mouse
 let targetTiltX = 0, targetTiltY = 0;
 let currentTiltX = 0, currentTiltY = 0;
-
 avatarWrap.addEventListener('mousemove', (e) => {
   const rect = avatarWrap.getBoundingClientRect();
   const x = (e.clientX - rect.left) / rect.width - 0.5;
   const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-  targetTiltY = x * 12;  // rotateY based on horizontal mouse
-  targetTiltX = -y * 8;  // rotateX based on vertical mouse
+  targetTiltY = x * 12;
+  targetTiltX = -y * 8;
 });
-
 avatarWrap.addEventListener('mouseleave', () => {
   targetTiltX = 0;
   targetTiltY = 0;
 });
-
 function animateAvatar() {
   currentTiltX += (targetTiltX - currentTiltX) * 0.08;
   currentTiltY += (targetTiltY - currentTiltY) * 0.08;
-
   avatar3d.style.setProperty('--tilt-x', currentTiltX + 'deg');
   avatar3d.style.setProperty('--tilt-y', currentTiltY + 'deg');
   avatar3d.classList.add('tilted');
-
   requestAnimationFrame(animateAvatar);
 }
 animateAvatar();
-
-// Subtle floating animation
 let floatTime = 0;
 function animateFloat() {
   floatTime += 0.015;
   const floatY = Math.sin(floatTime) * 6;
   const floatRotate = Math.sin(floatTime * 0.7) * 1.5;
-
   if (!avatarWrap.matches(':hover')) {
-    avatar3d.style.transform = `translateY(${floatY}px) rotateY(${floatRotate}deg)`;
+    avatar3d.style.transform = 'translateY(' + floatY + 'px) rotateY(' + floatRotate + 'deg)';
   } else {
     avatar3d.style.transform = '';
   }
@@ -527,32 +517,25 @@ function animateFloat() {
 }
 animateFloat();
 
-// ============================================
-// CUSTOM CURSOR
-// ============================================
+// Custom Cursor
 const cursor=document.querySelector('.cursor');
 const cursorDot=document.querySelector('.cursor-dot');
 let cursorX=0,cursorY=0,dotX=0,dotY=0;
-
 document.addEventListener('mousemove',(e)=>{cursorX=e.clientX;cursorY=e.clientY;});
-
 function animateCursor(){
   dotX+=(cursorX-dotX)*0.15;
   dotY+=(cursorY-dotY)*0.15;
-  cursor.style.transform=`translate(${cursorX-12}px,${cursorY-12}px)`;
-  cursorDot.style.transform=`translate(${dotX-2}px,${dotY-2}px)`;
+  cursor.style.transform='translate('+(cursorX-12)+'px,'+(cursorY-12)+'px)';
+  cursorDot.style.transform='translate('+(dotX-2)+'px,'+(dotY-2)+'px)';
   requestAnimationFrame(animateCursor);
 }
 animateCursor();
-
-document.querySelectorAll('a,button,.skill-chip,.project-tile,.stat-cell,.cert-item,.contact-channel,.social-icon').forEach(el=>{
+document.querySelectorAll('a,button,.skill-chip,.project-card,.bento-cell,.cert-item,.contact-channel,.social-icon,.scroll-arrow').forEach(el=>{
   el.addEventListener('mouseenter',()=>cursor.classList.add('hover'));
   el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'));
 });
 
-// ============================================
-// NAVIGATION
-// ============================================
+// Navigation
 const nav=document.querySelector('.nav');
 let lastScroll=0;
 window.addEventListener('scroll',()=>{
@@ -572,22 +555,16 @@ window.addEventListener('scroll',()=>{
   lastScroll=currentScroll;
 });
 
-// ============================================
-// GSAP ANIMATIONS
-// ============================================
+// GSAP Animations
 gsap.registerPlugin(ScrollTrigger);
-
-// Hero entrance
 gsap.to('.hero-eyebrow',{opacity:1,y:0,duration:0.8,delay:0.3,ease:'power3.out'});
 gsap.to('.hero h1 .line span',{y:0,duration:1,stagger:0.15,delay:0.5,ease:'power3.out'});
 gsap.to('.hero-subtitle',{opacity:1,y:0,duration:0.8,delay:0.9,ease:'power3.out'});
 gsap.to('.hero-cta-group',{opacity:1,y:0,duration:0.8,delay:1.1,ease:'power3.out'});
+gsap.to('.hero-stats-inline',{opacity:1,y:0,duration:0.8,delay:1.3,ease:'power3.out'});
 gsap.to('.scroll-hint',{opacity:1,duration:0.8,delay:1.5,ease:'power3.out'});
-
-// Avatar entrance
 gsap.from('#avatarWrap',{opacity:0,scale:0.9,duration:1.2,delay:0.2,ease:'power3.out'});
 
-// Reveal on scroll
 gsap.utils.toArray('.reveal').forEach(el=>{
   gsap.to(el,{
     scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'},
@@ -595,8 +572,7 @@ gsap.utils.toArray('.reveal').forEach(el=>{
   });
 });
 
-// Stats counter
-const statValues=document.querySelectorAll('.stat-value');
+const statValues=document.querySelectorAll('.bento-value, .hero-stat-inline .value');
 statValues.forEach(stat=>{
   const target=parseInt(stat.dataset.target);
   gsap.to(stat,{
@@ -609,8 +585,7 @@ statValues.forEach(stat=>{
   });
 });
 
-// Skill panels mouse glow
-document.querySelectorAll('.skill-panel').forEach(panel=>{
+document.querySelectorAll('.skill-bento').forEach(panel=>{
   panel.addEventListener('mousemove',e=>{
     const rect=panel.getBoundingClientRect();
     panel.style.setProperty('--mouse-x',((e.clientX-rect.left)/rect.width*100)+'%');
@@ -618,29 +593,36 @@ document.querySelectorAll('.skill-panel').forEach(panel=>{
   });
 });
 
-// Project tiles tilt
-document.querySelectorAll('.project-tile').forEach(tile=>{
-  tile.addEventListener('mousemove',e=>{
-    const rect=tile.getBoundingClientRect();
+document.querySelectorAll('.project-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const rect=card.getBoundingClientRect();
     const x=(e.clientX-rect.left)/rect.width-0.5;
     const y=(e.clientY-rect.top)/rect.height-0.5;
-    tile.style.transform=`perspective(1000px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-4px)`;
+    card.style.transform='perspective(1000px) rotateY('+(x*8)+'deg) rotateX('+(-y*8)+'deg) translateY(-6px)';
   });
-  tile.addEventListener('mouseleave',()=>{
-    tile.style.transform='';
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='';
   });
 });
 
-// ============================================
-// SMOOTH SCROLL FOR ANCHOR LINKS
-// ============================================
+// Horizontal Scroll Projects
+const projectsTrack = document.getElementById('projectsTrack');
+const scrollLeftBtn = document.getElementById('scrollLeft');
+const scrollRightBtn = document.getElementById('scrollRight');
+scrollLeftBtn.addEventListener('click', () => { projectsTrack.scrollBy({ left: -440, behavior: 'smooth' }); });
+scrollRightBtn.addEventListener('click', () => { projectsTrack.scrollBy({ left: 440, behavior: 'smooth' }); });
+let isDown = false, startX, scrollLeft;
+projectsTrack.addEventListener('mousedown', (e) => { isDown = true; projectsTrack.style.cursor = 'grabbing'; startX = e.pageX - projectsTrack.offsetLeft; scrollLeft = projectsTrack.scrollLeft; });
+projectsTrack.addEventListener('mouseleave', () => { isDown = false; projectsTrack.style.cursor = 'grab'; });
+projectsTrack.addEventListener('mouseup', () => { isDown = false; projectsTrack.style.cursor = 'grab'; });
+projectsTrack.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - projectsTrack.offsetLeft; const walk = (x - startX) * 2; projectsTrack.scrollLeft = scrollLeft - walk; });
+
+// Smooth Scroll Anchors
 document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
   anchor.addEventListener('click',function(e){
     e.preventDefault();
     const target=document.querySelector(this.getAttribute('href'));
-    if(target){
-      target.scrollIntoView({behavior:'smooth',block:'start'});
-    }
+    if(target){ target.scrollIntoView({behavior:'smooth',block:'start'}); }
   });
 });
 
