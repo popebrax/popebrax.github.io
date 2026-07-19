@@ -91,21 +91,23 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .theme-toggle.active .icon-moon{opacity:0}
 .theme-toggle.active .icon-sun{opacity:1}
 
-.nav-cta{padding:0.5rem 1.2rem;background:var(--accent-gold);color:var(--bg-deep);border-radius:6px;font-size:0.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden}
-.nav-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:left 0.5s}
-.nav-cta:hover::before{left:100%}
-.nav-cta:hover{background:var(--accent-gold-dim);transform:translateY(-1px);box-shadow:0 4px 20px var(--accent-gold-glow)}
-
-/* Sticky Sidebar */
-.sticky-sidebar{position:fixed;left:2rem;bottom:2rem;z-index:50;display:flex;flex-direction:column;gap:1rem;align-items:center}
-.sticky-sidebar::after{content:'';width:1px;height:60px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
-.sticky-sidebar a{width:40px;height:40px;border-radius:50%;border:1px solid var(--border-medium);display:flex;align-items:center;justify-content:center;color:var(--text-muted);text-decoration:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);background:var(--bg-glass);backdrop-filter:blur(8px)}
+/* Sticky Sidebar - Left */
+.sticky-sidebar{position:fixed;left:2rem;bottom:50%;transform:translateY(50%);z-index:50;display:flex;flex-direction:column;gap:0.8rem;align-items:center}
+.sticky-sidebar::before{content:'';width:1px;height:40px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
+.sticky-sidebar::after{content:'';width:1px;height:40px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
+.sticky-sidebar a{width:44px;height:44px;border-radius:12px;border:1px solid var(--border-medium);display:flex;align-items:center;justify-content:center;color:var(--text-muted);text-decoration:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);background:var(--bg-glass);backdrop-filter:blur(8px);position:relative;overflow:hidden}
 .sticky-sidebar a:hover{border-color:var(--accent-gold);color:var(--accent-gold);transform:translateY(-3px);box-shadow:0 8px 24px var(--accent-gold-glow)}
-.sticky-sidebar a .material-icons{font-size:18px}
-.sticky-email{position:fixed;right:2rem;bottom:2rem;z-index:50;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.sticky-sidebar a svg{width:20px;height:20px;fill:currentColor}
+.sticky-sidebar a .material-icons{font-size:20px}
+.sidebar-tooltip{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(-8px);background:var(--bg-elevated);border:1px solid var(--border-medium);padding:0.4rem 0.8rem;border-radius:8px;font-size:0.7rem;color:var(--text-secondary);white-space:nowrap;opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);font-family:var(--font-mono);letter-spacing:0.5px}
+.sticky-sidebar a:hover .sidebar-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}
+
+/* Sticky Email - Right */
+.sticky-email{position:fixed;right:2rem;bottom:50%;transform:translateY(50%);z-index:50;display:flex;flex-direction:column;align-items:center;gap:1rem}
 .sticky-email a{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:1.5px;color:var(--text-muted);text-decoration:none;writing-mode:vertical-rl;transition:color 0.3s;position:relative}
 .sticky-email a:hover{color:var(--accent-gold)}
-.sticky-email::after{content:'';width:1px;height:60px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
+.sticky-email::before{content:'';width:1px;height:40px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
+.sticky-email::after{content:'';width:1px;height:40px;background:linear-gradient(180deg,transparent,var(--accent-gold),transparent);opacity:0.4}
 
 .content{position:relative;z-index:1}
 
@@ -122,7 +124,6 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .hero h1 .highlight::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:4px;background:var(--accent-gold);opacity:0.3;border-radius:2px}
 .hero-subtitle{font-size:1.05rem;color:var(--text-secondary);max-width:460px;line-height:1.8;margin-bottom:2.2rem;opacity:0;transform:translateY(20px);font-weight:400}
 .hero-subtitle .code-snippet{font-family:var(--font-mono);color:var(--accent-gold);background:var(--bg-elevated);padding:0.15rem 0.4rem;border-radius:4px;font-size:0.85em;border:1px solid var(--border-subtle)}
-.hero-cta-group{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;transform:translateY(20px)}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;border-radius:10px;font-size:0.85rem;font-weight:600;text-decoration:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:pointer;border:none;font-family:inherit;letter-spacing:0.3px;position:relative;overflow:hidden}
@@ -141,11 +142,9 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .hero-stat-inline .label{font-size:0.65rem;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;font-weight:500}
 
 /* Avatar */
-.hero-avatar-side{display:flex;justify-content:center;align-items:center;position:relative;min-height:100vh}
+.hero-avatar-side{display:flex;justify-content:center;align-items:center;position:relative;min-height:100vh;perspective:1200px}
 .avatar-wrap{position:relative;width:420px;height:520px;z-index:2;transform-style:preserve-3d;transition:transform 0.1s ease-out}
-.avatar-wrap:hover{transform:rotateY(5deg) rotateX(-3deg)}
-.avatar-3d-container{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
-.avatar-3d-container.tilted{transform:rotateY(var(--tilt-y, 0deg)) rotateX(var(--tilt-x, 0deg))}
+.avatar-3d-container{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.15s cubic-bezier(0.16,1,0.3,1)}
 .avatar-img-wrapper{position:relative;width:100%;height:100%;border-radius:24px;overflow:hidden;transform-style:preserve-3d;box-shadow:0 25px 80px rgba(0,0,0,0.6),0 0 0 1px var(--border-subtle);transition:box-shadow 0.4s ease}
 .avatar-wrap:hover .avatar-img-wrapper{box-shadow:0 30px 100px var(--accent-gold-glow),0 0 0 1px var(--border-glow)}
 .avatar-img-wrapper img{width:100%;height:100%;object-fit:cover;transform:scale(1.05);transition:transform 0.6s cubic-bezier(0.16,1,0.3,1);filter:contrast(1.05) saturate(1.1)}
@@ -301,7 +300,6 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
   .hero{grid-template-columns:1fr;text-align:center;gap:2rem;padding-top:6rem}
   .hero-text-side{padding:0;text-align:center}
   .hero-subtitle{margin-left:auto;margin-right:auto}
-  .hero-cta-group{justify-content:center}
   .hero-stats-inline{justify-content:center}
   .hero-avatar-side{min-height:400px}
   .avatar-wrap{width:320px;height:400px}
@@ -309,7 +307,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
   .bento-grid{grid-template-columns:repeat(2,1fr)}
   .projects-track{padding:0 1.5rem}
   .project-card{min-width:340px;max-width:340px}
-  .sticky-sidebar,.sticky-email{display:none}
+  .sticky-sidebar{left:1rem}
+  .sticky-email{right:1rem}
 }
 @media(max-width:768px){
   .nav{padding:1rem 1.2rem}
@@ -324,6 +323,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
   .avatar-wrap{width:260px;height:340px}
   .project-card{min-width:300px;max-width:300px}
   .projects-track{padding:0 1rem}
+  .sticky-sidebar,.sticky-email{display:none}
 }
 @media(max-width:480px){
   .certs-row{grid-template-columns:1fr}
@@ -331,18 +331,49 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 }
 </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="cursor"></div>
 <div class="cursor-dot"></div>
 <canvas id="three-canvas"></canvas>
 
+<!-- Sticky Sidebar with Real Logos + Action Buttons -->
 <div class="sticky-sidebar">
-  <a href="https://github.com/popebrax" target="_blank" title="GitHub"><span class="material-icons">code</span></a>
-  <a href="https://linkedin.com/in/braxton-otieno-x" target="_blank" title="LinkedIn"><span class="material-icons">business</span></a>
-  <a href="https://twitter.com/popebrax" target="_blank" title="Twitter"><span class="material-icons">chat</span></a>
-  <a href="https://popebrax.github.io/" target="_blank" title="Website"><span class="material-icons">language</span></a>
+  <a href="#projects" title="View Projects">
+    <span class="material-icons">rocket_launch</span>
+    <span class="sidebar-tooltip">View Projects</span>
+  </a>
+  <a href="Braxton_Otieno_CV.pdf" download title="Download CV">
+    <span class="material-icons">download</span>
+    <span class="sidebar-tooltip">Download CV</span>
+  </a>
+  <a href="mailto:popebrax@gmail.com" title="Get in Touch">
+    <span class="material-icons">mail</span>
+    <span class="sidebar-tooltip">Get in Touch</span>
+  </a>
+  <a href="https://github.com/popebrax" target="_blank" title="GitHub">
+    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    <span class="sidebar-tooltip">GitHub</span>
+  </a>
+  <a href="https://linkedin.com/in/braxton-otieno-x" target="_blank" title="LinkedIn">
+    <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    <span class="sidebar-tooltip">LinkedIn</span>
+  </a>
+  <a href="https://twitter.com/popebrax" target="_blank" title="Twitter">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span class="sidebar-tooltip">Twitter</span>
+  </a>
+  <a href="mailto:popebrax@gmail.com" title="Gmail">
+    <svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+    <span class="sidebar-tooltip">Gmail</span>
+  </a>
+  <a href="https://popebrax.github.io/" target="_blank" title="Website">
+    <span class="material-icons">language</span>
+    <span class="sidebar-tooltip">Website</span>
+  </a>
 </div>
+
 <div class="sticky-email">
   <a href="mailto:popebrax@gmail.com">popebrax@gmail.com</a>
 </div>
@@ -354,7 +385,6 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#experience">Experience</a></li>
-    <li><a href="Braxton_Otieno_CV.pdf" class="nav-cta" download>Download CV</a></li>
     <li><a href="#contact" class="nav-cta">Hire Me</a></li>
     <li><div class="theme-toggle" id="themeToggle" title="Toggle theme"><span class="icon icon-moon">&#127769;</span><span class="icon icon-sun">&#9728;</span></div></li>
   </ul>
@@ -369,11 +399,6 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
         <span class="line"><span class="highlight kinetic-text">Otieno</span></span>
       </h1>
       <p class="hero-subtitle">Full-Stack Software Engineer building <span class="code-snippet">intelligent</span> applications across desktop, mobile, and AI systems. <span class="code-snippet">40,000+</span> downloads across 4 app stores.</p>
-      <div class="hero-cta-group">
-        <a href="#projects" class="btn btn-primary"><span class="material-icons">rocket_launch</span>View Projects</a>
-        <a href="mailto:popebrax@gmail.com" class="btn btn-ghost"><span class="material-icons">mail</span>Get in Touch</a>
-        <a href="Braxton_Otieno_CV.pdf" class="btn btn-outline" download><span class="material-icons">download</span>CV</a>
-      </div>
       <div class="hero-stats-inline">
         <div class="hero-stat-inline"><span class="value" data-target="5">0</span><span class="label">Apps</span></div>
         <div class="hero-stat-inline"><span class="value" data-target="40">0</span><span class="label">K+ Downloads</span></div>
@@ -566,44 +591,105 @@ window.addEventListener('resize', function() {
   bgRenderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Avatar 3D Simulation
+// ===== FIDGET SPINNER AVATAR EFFECT =====
+// The avatar card responds to mouse movement with momentum-based physics
+// mimicking a fidget spinner - the card spins with inertia and deceleration
 var avatarWrap = document.getElementById('avatarWrap');
 var avatar3d = document.getElementById('avatar3d');
-var targetTiltX = 0, targetTiltY = 0;
-var currentTiltX = 0, currentTiltY = 0;
 
-avatarWrap.addEventListener('mousemove', function(e) {
-  var rect = avatarWrap.getBoundingClientRect();
-  var x = (e.clientX - rect.left) / rect.width - 0.5;
-  var y = (e.clientY - rect.top) / rect.height - 0.5;
-  targetTiltY = x * 12;
-  targetTiltX = -y * 8;
+// Physics state
+var currentRotX = 0, currentRotY = 0;
+var velX = 0, velY = 0;
+var isHovering = false;
+var lastMX = 0, lastMY = 0;
+var angularMomentum = 0;
+var spinSpeed = 0;
+var floatTime = 0;
+
+avatarWrap.addEventListener('mouseenter', function() {
+  isHovering = true;
 });
 
 avatarWrap.addEventListener('mouseleave', function() {
-  targetTiltX = 0;
-  targetTiltY = 0;
+  isHovering = false;
+  // Preserve momentum on exit for natural deceleration
+  spinSpeed = angularMomentum * 0.3;
+});
+
+avatarWrap.addEventListener('mousemove', function(e) {
+  var rect = avatarWrap.getBoundingClientRect();
+  var centerX = rect.left + rect.width / 2;
+  var centerY = rect.top + rect.height / 2;
+
+  // Distance from center (normalized 0-1)
+  var dx = (e.clientX - centerX) / (rect.width / 2);
+  var dy = (e.clientY - centerY) / (rect.height / 2);
+
+  // Calculate mouse velocity for momentum
+  var mouseVelX = e.clientX - lastMX;
+  var mouseVelY = e.clientY - lastMY;
+  lastMX = e.clientX;
+  lastMY = e.clientY;
+
+  // Fidget spinner physics:
+  // The card tilts based on mouse position (like balancing)
+  // AND spins with momentum based on mouse movement speed
+
+  // Position-based tilt (balancing effect)
+  var tiltX = dy * 18;  // tilt up/down
+  var tiltY = dx * 22;  // tilt left/right
+
+  // Momentum-based spin (fidget spinner feel)
+  // Horizontal mouse movement creates rotational momentum
+  angularMomentum = mouseVelX * 0.8;
+
+  // Vertical mouse movement adds to X tilt
+  velX = tiltX + mouseVelY * 0.3;
+  velY = tiltY + angularMomentum;
 });
 
 function animateAvatar() {
-  currentTiltX += (targetTiltX - currentTiltX) * 0.08;
-  currentTiltY += (targetTiltY - currentTiltY) * 0.08;
-  avatar3d.style.setProperty('--tilt-x', currentTiltX + 'deg');
-  avatar3d.style.setProperty('--tilt-y', currentTiltY + 'deg');
-  avatar3d.classList.add('tilted');
+  // Smooth interpolation with momentum physics
+  currentRotX += (velX - currentRotX) * 0.12;
+  currentRotY += (velY - currentRotY) * 0.12;
+
+  // Apply momentum decay (friction)
+  velX *= 0.92;
+  velY *= 0.92;
+  angularMomentum *= 0.90;
+
+  // Spin deceleration when not hovering
+  if (!isHovering) {
+    spinSpeed *= 0.95;
+    currentRotY += spinSpeed;
+    currentRotX *= 0.95;
+    if (Math.abs(currentRotX) < 0.1) currentRotX = 0;
+    if (Math.abs(currentRotY) < 0.1) currentRotY = 0;
+    if (Math.abs(spinSpeed) < 0.01) spinSpeed = 0;
+  }
+
+  // Clamp rotations to keep card readable
+  var clampedX = Math.max(-25, Math.min(25, currentRotX));
+  var clampedY = Math.max(-30, Math.min(30, currentRotY));
+
+  // Apply transform - the card tilts like a physical object being spun
+  avatar3d.style.transform = 'rotateX(' + (-clampedX) + 'deg) rotateY(' + clampedY + 'deg)';
+
   requestAnimationFrame(animateAvatar);
 }
 animateAvatar();
 
-var floatTime = 0;
+// Floating animation (independent of mouse)
 function animateFloat() {
   floatTime += 0.015;
   var floatY = Math.sin(floatTime) * 6;
   var floatRotate = Math.sin(floatTime * 0.7) * 1.5;
-  if (!avatarWrap.matches(':hover')) {
-    avatar3d.style.transform = 'translateY(' + floatY + 'px) rotateY(' + floatRotate + 'deg)';
+
+  // Only apply float when not being interacted with
+  if (!isHovering && Math.abs(currentRotX) < 1 && Math.abs(currentRotY) < 1) {
+    avatarWrap.style.transform = 'translateY(' + floatY + 'px)';
   } else {
-    avatar3d.style.transform = '';
+    avatarWrap.style.transform = '';
   }
   requestAnimationFrame(animateFloat);
 }
@@ -658,9 +744,8 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.to('.hero-eyebrow', {opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out'});
 gsap.to('.hero h1 .line span', {y: 0, duration: 1, stagger: 0.15, delay: 0.5, ease: 'power3.out'});
 gsap.to('.hero-subtitle', {opacity: 1, y: 0, duration: 0.8, delay: 0.9, ease: 'power3.out'});
-gsap.to('.hero-cta-group', {opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: 'power3.out'});
-gsap.to('.hero-stats-inline', {opacity: 1, y: 0, duration: 0.8, delay: 1.3, ease: 'power3.out'});
-gsap.to('.scroll-hint', {opacity: 1, duration: 0.8, delay: 1.5, ease: 'power3.out'});
+gsap.to('.hero-stats-inline', {opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: 'power3.out'});
+gsap.to('.scroll-hint', {opacity: 1, duration: 0.8, delay: 1.3, ease: 'power3.out'});
 gsap.from('#avatarWrap', {opacity: 0, scale: 0.9, duration: 1.2, delay: 0.2, ease: 'power3.out'});
 
 var revealElements = document.querySelectorAll('.reveal');
