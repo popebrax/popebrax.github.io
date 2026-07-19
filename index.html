@@ -68,6 +68,11 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .cursor-dot{width:4px;height:4px;background:var(--accent-gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.08s ease}
 #three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
+/* Bird Game Hint */
+.bird-hint{position:fixed;top:1.5rem;right:2rem;z-index:45;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;opacity:0;transition:opacity 0.8s ease;pointer-events:none}
+.bird-hint.visible{opacity:0.5}
+.bird-hint span{color:var(--accent-gold)}
+
 /* Nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:var(--bg-glass);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--border-subtle);transform:translateY(-100%);transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),background 0.3s}
 .nav.visible{transform:translateY(0)}
@@ -338,6 +343,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 <body>
 <div class="cursor"></div>
 <div class="cursor-dot"></div>
+<div class="bird-hint" id="birdHint">Move mouse to guide the <span>bird</span></div>
 <canvas id="three-canvas"></canvas>
 
 <!-- Sticky Sidebar with Real Logos + Action Buttons -->
@@ -536,7 +542,17 @@ themeToggle.addEventListener('click', function() {
   else { html.setAttribute('data-theme', 'light'); themeToggle.classList.add('active'); }
 });
 
-// Three.js Background
+// ============================================================
+// THREE.JS BACKGROUND WITH BIRD GAME
+// ============================================================
+// The scene contains:
+// 1. Atmospheric floating particles (original effect, preserved)
+// 2. A bird that flies left-to-right across the screen
+// 3. Mouse controls the bird's vertical position (guide it up/down)
+// 4. Obstacles (pillars) the bird must avoid
+// 5. Score tracking
+// ============================================================
+
 var bgCanvas = document.getElementById('three-canvas');
 var bgScene = new THREE.Scene();
 var bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -544,45 +560,266 @@ var bgRenderer = new THREE.WebGLRenderer({canvas: bgCanvas, alpha: true, antiali
 bgRenderer.setSize(window.innerWidth, window.innerHeight);
 bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+// Fog for depth
+bgScene.fog = new THREE.FogExp2(0x0a0a0c, 0.035);
+
+// --- ATMOSPHERIC PARTICLES (original effect) ---
 var particleCount = 120;
 var positions = new Float32Array(particleCount * 3);
-var velocities = [];
+var particleVelocities = [];
 for (var i = 0; i < particleCount; i++) {
   positions[i * 3] = (Math.random() - 0.5) * 18;
   positions[i * 3 + 1] = (Math.random() - 0.5) * 18;
   positions[i * 3 + 2] = (Math.random() - 0.5) * 8;
-  velocities.push({x: (Math.random() - 0.5) * 0.0015, y: (Math.random() - 0.5) * 0.0015, z: (Math.random() - 0.5) * 0.0008});
+  particleVelocities.push({
+    x: (Math.random() - 0.5) * 0.0015,
+    y: (Math.random() - 0.5) * 0.0015,
+    z: (Math.random() - 0.5) * 0.0008
+  });
 }
 var bgGeometry = new THREE.BufferGeometry();
 bgGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-var bgMaterial = new THREE.PointsMaterial({color: 0xc9a96e, size: 0.025, transparent: true, opacity: 0.5, sizeAttenuation: true});
+var bgMaterial = new THREE.PointsMaterial({
+  color: 0xc9a96e, size: 0.025, transparent: true,
+  opacity: 0.5, sizeAttenuation: true
+});
 var bgParticles = new THREE.Points(bgGeometry, bgMaterial);
 bgScene.add(bgParticles);
-bgCamera.position.z = 5;
 
+// --- BIRD CHARACTER ---
+// Built from simple geometries - a stylized bird shape
+var birdGroup = new THREE.Group();
+
+// Body (elongated sphere)
+var bodyGeo = new THREE.SphereGeometry(0.12, 12, 12);
+bodyGeo.scale(1, 0.7, 1.6);
+var bodyMat = new THREE.MeshBasicMaterial({color: 0xc9a96e});
+var birdBody = new THREE.Mesh(bodyGeo, bodyMat);
+birdGroup.add(birdBody);
+
+// Head
+var headGeo = new THREE.SphereGeometry(0.08, 10, 10);
+var headMat = new THREE.MeshBasicMaterial({color: 0xd4b87a});
+var birdHead = new THREE.Mesh(headGeo, headMat);
+birdHead.position.set(0, 0.08, 0.18);
+birdGroup.add(birdHead);
+
+// Beak
+var beakGeo = new THREE.ConeGeometry(0.03, 0.08, 6);
+var beakMat = new THREE.MeshBasicMaterial({color: 0xffa500});
+var birdBeak = new THREE.Mesh(beakGeo, beakMat);
+birdBeak.rotation.x = Math.PI / 2;
+birdBeak.position.set(0, 0.08, 0.26);
+birdGroup.add(birdBeak);
+
+// Eye
+var eyeGeo = new THREE.SphereGeometry(0.025, 8, 8);
+var eyeMat = new THREE.MeshBasicMaterial({color: 0x1a1a1c});
+var birdEye = new THREE.Mesh(eyeGeo, eyeMat);
+birdEye.position.set(0.04, 0.1, 0.22);
+birdGroup.add(birdEye);
+
+// Left Wing
+var wingGeo = new THREE.SphereGeometry(0.1, 8, 8);
+wingGeo.scale(0.3, 0.1, 1.2);
+var wingMat = new THREE.MeshBasicMaterial({color: 0xb8944f, transparent: true, opacity: 0.9});
+var leftWing = new THREE.Mesh(wingGeo, wingMat);
+leftWing.position.set(-0.12, 0.02, -0.02);
+leftWing.rotation.z = 0.3;
+birdGroup.add(leftWing);
+
+// Right Wing
+var rightWing = new THREE.Mesh(wingGeo, wingMat.clone());
+rightWing.position.set(0.12, 0.02, -0.02);
+rightWing.rotation.z = -0.3;
+birdGroup.add(rightWing);
+
+// Tail
+var tailGeo = new THREE.ConeGeometry(0.05, 0.15, 4);
+var tailMat = new THREE.MeshBasicMaterial({color: 0xa88a4e});
+var birdTail = new THREE.Mesh(tailGeo, tailMat);
+birdTail.rotation.x = -Math.PI / 2.5;
+birdTail.position.set(0, 0.02, -0.22);
+birdGroup.add(birdTail);
+
+bgScene.add(birdGroup);
+
+// --- OBSTACLES (Pillars to avoid) ---
+var obstacles = [];
+var obstacleSpeed = 2.5;
+var spawnTimer = 0;
+var spawnInterval = 2.0; // seconds between obstacles
+
+function createObstacle() {
+  var gapY = (Math.random() - 0.5) * 6; // Random gap position
+  var gapSize = 2.2; // Gap size
+  var pillarGeo = new THREE.BoxGeometry(0.3, 10, 0.3);
+  var pillarMat = new THREE.MeshBasicMaterial({
+    color: 0xc9a96e, transparent: true, opacity: 0.15
+  });
+
+  // Top pillar
+  var topPillar = new THREE.Mesh(pillarGeo, pillarMat);
+  topPillar.position.set(10, gapY + gapSize/2 + 5, 0);
+  bgScene.add(topPillar);
+
+  // Bottom pillar
+  var bottomPillar = new THREE.Mesh(pillarGeo, pillarMat);
+  bottomPillar.position.set(10, gapY - gapSize/2 - 5, 0);
+  bgScene.add(bottomPillar);
+
+  // Glow edges for visibility
+  var edgeGeo = new THREE.EdgesGeometry(pillarGeo);
+  var edgeMat = new THREE.LineBasicMaterial({color: 0xc9a96e, transparent: true, opacity: 0.3});
+  var topEdges = new THREE.LineSegments(edgeGeo, edgeMat);
+  topEdges.position.copy(topPillar.position);
+  bgScene.add(topEdges);
+  var bottomEdges = new THREE.LineSegments(edgeGeo, edgeMat);
+  bottomEdges.position.copy(bottomPillar.position);
+  bgScene.add(bottomEdges);
+
+  obstacles.push({
+    top: topPillar, bottom: bottomPillar,
+    topEdges: topEdges, bottomEdges: bottomEdges,
+    passed: false, gapY: gapY, gapSize: gapSize
+  });
+}
+
+// --- SCORE & GAME STATE ---
+var score = 0;
+var gameActive = true;
+var birdY = 0;
+var birdVelocityY = 0;
+var targetBirdY = 0;
+var wingFlapPhase = 0;
 var bgMouseX = 0, bgMouseY = 0;
+
+// Mouse tracking for bird control
 document.addEventListener('mousemove', function(e) {
   bgMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
   bgMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  // Map mouse Y to bird target position (screen space to world space)
+  targetBirdY = -bgMouseY * 4; // Range: -4 to +4
 });
+
+// Show hint after a delay
+setTimeout(function() {
+  document.getElementById('birdHint').classList.add('visible');
+}, 3000);
+
+// Hide hint after first interaction
+document.addEventListener('mousemove', function hintHide() {
+  document.getElementById('birdHint').classList.remove('visible');
+  document.removeEventListener('mousemove', hintHide);
+});
+
+bgCamera.position.z = 5;
+
+// --- MAIN ANIMATION LOOP ---
+var lastTime = performance.now() / 1000;
+var clock = new THREE.Clock();
 
 function animateBg() {
   requestAnimationFrame(animateBg);
+  var now = performance.now() / 1000;
+  var delta = Math.min(now - lastTime, 0.05); // Cap delta to prevent jumps
+  lastTime = now;
+  var elapsed = clock.getElapsedTime();
+
+  // 1. Update atmospheric particles
   var posArray = bgGeometry.attributes.position.array;
   for (var i = 0; i < particleCount; i++) {
-    posArray[i * 3] += velocities[i].x;
-    posArray[i * 3 + 1] += velocities[i].y;
-    posArray[i * 3 + 2] += velocities[i].z;
-    if (Math.abs(posArray[i * 3]) > 9) velocities[i].x *= -1;
-    if (Math.abs(posArray[i * 3 + 1]) > 9) velocities[i].y *= -1;
-    if (Math.abs(posArray[i * 3 + 2]) > 4) velocities[i].z *= -1;
+    posArray[i * 3] += particleVelocities[i].x;
+    posArray[i * 3 + 1] += particleVelocities[i].y;
+    posArray[i * 3 + 2] += particleVelocities[i].z;
+    if (Math.abs(posArray[i * 3]) > 9) particleVelocities[i].x *= -1;
+    if (Math.abs(posArray[i * 3 + 1]) > 9) particleVelocities[i].y *= -1;
+    if (Math.abs(posArray[i * 3 + 2]) > 4) particleVelocities[i].z *= -1;
   }
   bgGeometry.attributes.position.needsUpdate = true;
   bgParticles.rotation.x += 0.00015;
   bgParticles.rotation.y += 0.00025;
-  bgCamera.position.x += (bgMouseX * 0.4 - bgCamera.position.x) * 0.015;
-  bgCamera.position.y += (-bgMouseY * 0.4 - bgCamera.position.y) * 0.015;
+
+  // 2. Bird physics - smooth follow mouse Y with momentum
+  birdVelocityY += (targetBirdY - birdY) * 3.0 * delta;
+  birdVelocityY *= 0.92; // Damping
+  birdY += birdVelocityY * delta;
+  // Clamp bird to screen bounds
+  birdY = Math.max(-4.5, Math.min(4.5, birdY));
+
+  // Update bird position
+  birdGroup.position.y = birdY;
+  birdGroup.position.x = -2; // Fixed X position (bird stays left, world moves right)
+
+  // Bird tilt based on vertical velocity
+  birdGroup.rotation.z = -birdVelocityY * 0.15;
+  birdGroup.rotation.x = Math.sin(elapsed * 2) * 0.05; // Gentle bob
+
+  // Wing flapping animation
+  wingFlapPhase += delta * 12;
+  leftWing.rotation.z = 0.3 + Math.sin(wingFlapPhase) * 0.4;
+  rightWing.rotation.z = -0.3 - Math.sin(wingFlapPhase) * 0.4;
+
+  // 3. Spawn obstacles
+  spawnTimer += delta;
+  if (spawnTimer > spawnInterval && gameActive) {
+    spawnTimer = 0;
+    createObstacle();
+    // Gradually increase difficulty
+    spawnInterval = Math.max(1.2, spawnInterval - 0.02);
+  }
+
+  // 4. Update obstacles
+  for (var j = obstacles.length - 1; j >= 0; j--) {
+    var obs = obstacles[j];
+    obs.top.position.x -= obstacleSpeed * delta;
+    obs.bottom.position.x -= obstacleSpeed * delta;
+    obs.topEdges.position.x = obs.top.position.x;
+    obs.bottomEdges.position.x = obs.bottom.position.x;
+
+    // Score when passing bird
+    if (!obs.passed && obs.top.position.x < birdGroup.position.x) {
+      obs.passed = true;
+      score++;
+    }
+
+    // Remove off-screen obstacles
+    if (obs.top.position.x < -12) {
+      bgScene.remove(obs.top);
+      bgScene.remove(obs.bottom);
+      bgScene.remove(obs.topEdges);
+      bgScene.remove(obs.bottomEdges);
+      obstacles.splice(j, 1);
+    }
+
+    // Collision detection (simplified AABB)
+    var birdLeft = birdGroup.position.x - 0.15;
+    var birdRight = birdGroup.position.x + 0.15;
+    var birdTop = birdY + 0.12;
+    var birdBottom = birdY - 0.12;
+    var obsLeft = obs.top.position.x - 0.15;
+    var obsRight = obs.top.position.x + 0.15;
+
+    if (birdRight > obsLeft && birdLeft < obsRight) {
+      // Check if bird is in the gap
+      var gapTop = obs.gapY + obs.gapSize/2;
+      var gapBottom = obs.gapY - obs.gapSize/2;
+      if (birdTop > gapTop || birdBottom < gapBottom) {
+        // Collision! Reset game
+        score = 0;
+        spawnInterval = 2.0;
+        // Flash bird red
+        bodyMat.color.setHex(0xff4444);
+        setTimeout(function() { bodyMat.color.setHex(0xc9a96e); }, 200);
+      }
+    }
+  }
+
+  // 5. Camera subtle parallax follow
+  bgCamera.position.x += (bgMouseX * 0.3 - bgCamera.position.x) * 0.015;
+  bgCamera.position.y += (-bgMouseY * 0.3 - bgCamera.position.y) * 0.015;
   bgCamera.lookAt(bgScene.position);
+
   bgRenderer.render(bgScene, bgCamera);
 }
 animateBg();
@@ -593,7 +830,9 @@ window.addEventListener('resize', function() {
   bgRenderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ===== FIDGET SPINNER AVATAR EFFECT =====
+// ============================================================
+// FIDGET SPINNER AVATAR EFFECT
+// ============================================================
 var avatarWrap = document.getElementById('avatarWrap');
 var avatar3d = document.getElementById('avatar3d');
 
@@ -664,7 +903,9 @@ function animateFloat() {
 }
 animateFloat();
 
-// Custom Cursor
+// ============================================================
+// CUSTOM CURSOR
+// ============================================================
 var cursor = document.querySelector('.cursor');
 var cursorDot = document.querySelector('.cursor-dot');
 var cursorX = 0, cursorY = 0, dotX = 0, dotY = 0;
@@ -688,7 +929,9 @@ for (var i = 0; i < hoverElements.length; i++) {
   hoverElements[i].addEventListener('mouseleave', function() { cursor.classList.remove('hover'); });
 }
 
-// Navigation
+// ============================================================
+// NAVIGATION
+// ============================================================
 var nav = document.querySelector('.nav');
 var lastScroll = 0;
 window.addEventListener('scroll', function() {
@@ -708,7 +951,9 @@ window.addEventListener('scroll', function() {
   lastScroll = currentScroll;
 });
 
-// GSAP Animations
+// ============================================================
+// GSAP ANIMATIONS
+// ============================================================
 gsap.registerPlugin(ScrollTrigger);
 gsap.to('.hero-eyebrow', {opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out'});
 gsap.to('.hero h1 .line span', {y: 0, duration: 1, stagger: 0.15, delay: 0.5, ease: 'power3.out'});
