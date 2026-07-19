@@ -342,13 +342,21 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
   .certs-row{grid-template-columns:1fr}
   .project-card{min-width:280px;max-width:280px}
 }
+.bird-score{position:fixed;top:1.5rem;right:2rem;z-index:46;font-family:var(--font-mono);font-size:1.4rem;color:var(--accent-gold);letter-spacing:2px;font-weight:700;opacity:0;transition:opacity 0.8s ease,transform 0.3s ease;pointer-events:none;text-shadow:0 0 20px var(--accent-gold-glow)}
+.bird-score.visible{opacity:1}
+.bird-score.reset{transform:scale(1.4);color:#ff4444;text-shadow:0 0 20px rgba(255,68,68,0.4)}
+@media(max-width:768px){
+  .bird-score{top:4.2rem;right:1rem;font-size:1.1rem}
+}
 </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
 <body>
 <div class="cursor"></div>
 <div class="cursor-dot"></div>
+<div class="bird-score" id="birdScore">0</div>
 <div class="bird-hint" id="birdHint"><span class="desktop-hint">Move mouse to guide the </span><span class="mobile-hint">Touch & drag to guide the </span><span>bird</span></div>
 <canvas id="three-canvas"></canvas>
 
@@ -727,12 +735,13 @@ document.addEventListener('touchstart', function(e) {
   }
 }, {passive: true});
 
-// Show hint after a delay
+// Show hint and score after a delay
 setTimeout(function() {
   document.getElementById('birdHint').classList.add('visible');
+  document.getElementById('birdScore').classList.add('visible');
 }, 3000);
 
-// Hide hint after first interaction (mouse or touch)
+// Hide hint after first interaction (mouse or touch), keep score visible
 function hideHint() {
   document.getElementById('birdHint').classList.remove('visible');
   document.removeEventListener('mousemove', hideHint);
@@ -819,6 +828,8 @@ function animateBg() {
     if (!obs.passed && obs.top.position.x < birdGroup.position.x) {
       obs.passed = true;
       score++;
+      var scoreEl = document.getElementById('birdScore');
+      if (scoreEl) scoreEl.innerText = score;
     }
 
     // Remove off-screen obstacles
@@ -831,10 +842,10 @@ function animateBg() {
     }
 
     // Collision detection (simplified AABB)
-    var birdLeft = birdGroup.position.x - 0.15;
-    var birdRight = birdGroup.position.x + 0.15;
-    var birdTop = birdY + 0.12;
-    var birdBottom = birdY - 0.12;
+    var birdLeft = birdGroup.position.x - 0.12;
+    var birdRight = birdGroup.position.x + 0.12;
+    var birdTop = birdY + 0.10;
+    var birdBottom = birdY - 0.10;
     var obsLeft = obs.top.position.x - 0.15;
     var obsRight = obs.top.position.x + 0.15;
 
@@ -843,12 +854,23 @@ function animateBg() {
       var gapTop = obs.gapY + obs.gapSize/2;
       var gapBottom = obs.gapY - obs.gapSize/2;
       if (birdTop > gapTop || birdBottom < gapBottom) {
-        // Collision! Reset game
-        score = 0;
-        spawnInterval = 2.0;
+        // Collision! Reset score, flash red, keep playing
+        if (score > 0) {
+          score = 0;
+          var scoreEl = document.getElementById('birdScore');
+          if (scoreEl) {
+            scoreEl.innerText = '0';
+            scoreEl.classList.add('reset');
+            setTimeout(function() { scoreEl.classList.remove('reset'); }, 400);
+          }
+        }
         // Flash bird red
         bodyMat.color.setHex(0xff4444);
-        setTimeout(function() { bodyMat.color.setHex(0xc9a96e); }, 200);
+        headMat.color.setHex(0xff6666);
+        setTimeout(function() { 
+          bodyMat.color.setHex(0xc9a96e); 
+          headMat.color.setHex(0xd4b87a);
+        }, 300);
       }
     }
   }
