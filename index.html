@@ -216,6 +216,8 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .project-card{min-width:420px;max-width:420px;flex-shrink:0;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:24px;overflow:hidden;transition:all 0.5s cubic-bezier(0.16,1,0.3,1);position:relative;transform-style:preserve-3d;scroll-snap-align:start;backdrop-filter:blur(10px)}
 .project-card:hover{border-color:var(--border-medium);box-shadow:0 24px 50px rgba(0,0,0,0.35);transform:translateY(-6px)}
 .project-visual{height:200px;background:linear-gradient(145deg,var(--bg-elevated),var(--bg-surface));position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.project-visual img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+.project-card:hover .project-visual img{transform:scale(1.08)}
 .project-visual .material-icons{font-size:48px;color:var(--accent-gold);opacity:0.2;transition:all 0.5s cubic-bezier(0.16,1,0.3,1)}
 .project-card:hover .project-visual .material-icons{opacity:0.5;transform:scale(1.1) rotate(5deg)}
 .project-visual::after{content:'';position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(to top,var(--bg-surface),transparent)}
@@ -460,16 +462,16 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
           <div class="project-content"><h3>AI Hiring Assistant</h3><p>Intelligent candidate evaluation system that processes multiple CVs simultaneously and scores applicants against job requirements.</p><ul class="project-highlights"><li>Multi-document CV aggregation and parsing</li><li>Automated scoring against job descriptions</li><li>Streamlined candidate ranking pipeline</li></ul><div class="project-stack"><span class="stack-tag">AI</span><span class="stack-tag">Document Processing</span><span class="stack-tag">Automation</span></div></div>
         </div>
         <div class="project-card reveal" data-tilt>
-          <div class="project-visual"><span class="material-icons">description</span><span class="project-badge badge-review">In Review</span></div>
-          <div class="project-content"><h3>LocalNote AI</h3><p>Privacy-first desktop document analysis tool with embedded AI. Local processing ensures sensitive data never leaves the machine.</p><ul class="project-highlights"><li>React + Tauri with Python FastAPI backend</li><li>RAG supporting Gemini, OpenAI, Anthropic</li><li>Auto summaries, quizzes, flashcards & mind maps</li></ul><div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">Tauri</span><span class="stack-tag">FastAPI</span><span class="stack-tag">RAG</span></div></div>
+          <div class="project-visual"><img src="localnote-thumb.png" alt="LocalNote AI"><span class="project-badge badge-review">In Review</span></div>
+          <div class="project-content"><h3>LocalNote AI</h3><p>Privacy-first desktop document analysis tool with embedded AI. Local processing ensures sensitive data never leaves the machine.</p><ul class="project-highlights"><li>React + Tauri with Python FastAPI backend</li><li>RAG supporting Gemini, OpenAI, Anthropic</li><li>Auto summaries, quizzes, flashcards & mind maps</li></ul><div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">Tauri</span><span class="stack-tag">FastAPI</span><span class="stack-tag">RAG</span></div><div class="project-links"><a href="https://apps.microsoft.com/store/detail/XP9LZR0XWPF4M5" target="_blank"><span class="material-icons">open_in_new</span>Microsoft Store</a></div></div>
         </div>
         <div class="project-card reveal" data-tilt>
-          <div class="project-visual"><span class="material-icons">auto_awesome</span><span class="project-badge badge-live">Live</span></div>
-          <div class="project-content"><h3>EonDev AI</h3><p>Intelligent desktop assistant for developers. Real-time meeting transcription with AI-powered suggestions and screen analysis.</p><ul class="project-highlights"><li>Live meeting transcription with AI suggestions</li><li>Screen OCR for instant text capture</li><li>Secure cross-platform data export</li></ul><div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">Tauri</span><span class="stack-tag">Node.js</span><span class="stack-tag">OCR</span></div><div class="project-links"><a href="https://popebrax.github.io/eondev" target="_blank"><span class="material-icons">open_in_new</span>Live App</a><a href="https://github.com/popebrax/eondev-ai" target="_blank"><span class="material-icons">code</span>Source</a></div></div>
+          <div class="project-visual"><img src="eondev-thumb.png" alt="EonDev AI"><span class="project-badge badge-live">Live</span></div>
+          <div class="project-content"><h3>EonDev AI</h3><p>Intelligent desktop assistant for developers. Real-time meeting transcription with AI-powered suggestions and screen analysis.</p><ul class="project-highlights"><li>Live meeting transcription with AI suggestions</li><li>Screen OCR for instant text capture</li><li>Secure cross-platform data export</li></ul><div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">Tauri</span><span class="stack-tag">Node.js</span><span class="stack-tag">OCR</span></div><div class="project-links"><a href="https://apps.microsoft.com/store/detail/XPFFPZQH9LDGSK" target="_blank"><span class="material-icons">open_in_new</span>Microsoft Store</a><a href="https://github.com/popebrax/eondev-ai" target="_blank"><span class="material-icons">code</span>Source</a></div></div>
         </div>
         <div class="project-card reveal" data-tilt>
           <div class="project-visual"><span class="material-icons">music_note</span><span class="project-badge badge-live">40K+ Downloads</span></div>
-          <div class="project-content"><h3>3D Surround Music Player</h3><p>Android music player with custom 3D audio processing engine. Material Design UI deployed across 4 major app stores.</p><ul class="project-highlights"><li>Custom 3D audio processing engine</li><li>Material Design with immersive UI</li><li>Cross-store: Google, Amazon, Huawei, Palm</li></ul><div class="project-stack"><span class="stack-tag">Android</span><span class="stack-tag">Audio Processing</span><span class="stack-tag">Material Design</span><span class="stack-tag">Cross-Platform</span></div></div>
+          <div class="project-content"><h3>3D Surround Music Player</h3><p>Android music player with custom 3D audio processing engine. Material Design UI deployed across 4 major app stores.</p><ul class="project-highlights"><li>Custom 3D audio processing engine</li><li>Material Design with immersive UI</li><li>Cross-store: Google, Amazon, Huawei, Palm</li></ul><div class="project-stack"><span class="stack-tag">Android</span><span class="stack-tag">Audio Processing</span><span class="stack-tag">Material Design</span><span class="stack-tag">Cross-Platform</span></div><div class="project-links"><a href="https://appgallery.huawei.com/#/app/C115944465" target="_blank"><span class="material-icons">open_in_new</span>Huawei</a><a href="https://www.palmplaystore.com/detail/com.popes.a3dsurroundmusicplayerX?country=KE" target="_blank"><span class="material-icons">open_in_new</span>Palm Play</a></div></div>
         </div>
       </div>
     </div>
@@ -592,12 +594,9 @@ window.addEventListener('resize', function() {
 });
 
 // ===== FIDGET SPINNER AVATAR EFFECT =====
-// The avatar card responds to mouse movement with momentum-based physics
-// mimicking a fidget spinner - the card spins with inertia and deceleration
 var avatarWrap = document.getElementById('avatarWrap');
 var avatar3d = document.getElementById('avatar3d');
 
-// Physics state
 var currentRotX = 0, currentRotY = 0;
 var velX = 0, velY = 0;
 var isHovering = false;
@@ -612,7 +611,6 @@ avatarWrap.addEventListener('mouseenter', function() {
 
 avatarWrap.addEventListener('mouseleave', function() {
   isHovering = false;
-  // Preserve momentum on exit for natural deceleration
   spinSpeed = angularMomentum * 0.3;
 });
 
@@ -620,45 +618,25 @@ avatarWrap.addEventListener('mousemove', function(e) {
   var rect = avatarWrap.getBoundingClientRect();
   var centerX = rect.left + rect.width / 2;
   var centerY = rect.top + rect.height / 2;
-
-  // Distance from center (normalized 0-1)
   var dx = (e.clientX - centerX) / (rect.width / 2);
   var dy = (e.clientY - centerY) / (rect.height / 2);
-
-  // Calculate mouse velocity for momentum
   var mouseVelX = e.clientX - lastMX;
   var mouseVelY = e.clientY - lastMY;
   lastMX = e.clientX;
   lastMY = e.clientY;
-
-  // Fidget spinner physics:
-  // The card tilts based on mouse position (like balancing)
-  // AND spins with momentum based on mouse movement speed
-
-  // Position-based tilt (balancing effect)
-  var tiltX = dy * 18;  // tilt up/down
-  var tiltY = dx * 22;  // tilt left/right
-
-  // Momentum-based spin (fidget spinner feel)
-  // Horizontal mouse movement creates rotational momentum
+  var tiltX = dy * 18;
+  var tiltY = dx * 22;
   angularMomentum = mouseVelX * 0.8;
-
-  // Vertical mouse movement adds to X tilt
   velX = tiltX + mouseVelY * 0.3;
   velY = tiltY + angularMomentum;
 });
 
 function animateAvatar() {
-  // Smooth interpolation with momentum physics
   currentRotX += (velX - currentRotX) * 0.12;
   currentRotY += (velY - currentRotY) * 0.12;
-
-  // Apply momentum decay (friction)
   velX *= 0.92;
   velY *= 0.92;
   angularMomentum *= 0.90;
-
-  // Spin deceleration when not hovering
   if (!isHovering) {
     spinSpeed *= 0.95;
     currentRotY += spinSpeed;
@@ -667,25 +645,16 @@ function animateAvatar() {
     if (Math.abs(currentRotY) < 0.1) currentRotY = 0;
     if (Math.abs(spinSpeed) < 0.01) spinSpeed = 0;
   }
-
-  // Clamp rotations to keep card readable
   var clampedX = Math.max(-25, Math.min(25, currentRotX));
   var clampedY = Math.max(-30, Math.min(30, currentRotY));
-
-  // Apply transform - the card tilts like a physical object being spun
   avatar3d.style.transform = 'rotateX(' + (-clampedX) + 'deg) rotateY(' + clampedY + 'deg)';
-
   requestAnimationFrame(animateAvatar);
 }
 animateAvatar();
 
-// Floating animation (independent of mouse)
 function animateFloat() {
   floatTime += 0.015;
   var floatY = Math.sin(floatTime) * 6;
-  var floatRotate = Math.sin(floatTime * 0.7) * 1.5;
-
-  // Only apply float when not being interacted with
   if (!isHovering && Math.abs(currentRotX) < 1 && Math.abs(currentRotY) < 1) {
     avatarWrap.style.transform = 'translateY(' + floatY + 'px)';
   } else {
