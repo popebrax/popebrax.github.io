@@ -72,6 +72,12 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 .bird-hint{position:fixed;top:1.5rem;right:2rem;z-index:45;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;opacity:0;transition:opacity 0.8s ease;pointer-events:none}
 .bird-hint.visible{opacity:0.5}
 .bird-hint span{color:var(--accent-gold)}
+.bird-hint .mobile-hint{display:none}
+@media(max-width:768px){
+  .bird-hint{top:4.5rem;right:1rem;font-size:0.55rem}
+  .bird-hint .desktop-hint{display:none}
+  .bird-hint .mobile-hint{display:inline}
+}
 
 /* Nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:var(--bg-glass);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--border-subtle);transform:translateY(-100%);transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),background 0.3s}
@@ -343,7 +349,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 <body>
 <div class="cursor"></div>
 <div class="cursor-dot"></div>
-<div class="bird-hint" id="birdHint">Move mouse to guide the <span>bird</span></div>
+<div class="bird-hint" id="birdHint"><span class="desktop-hint">Move mouse to guide the </span><span class="mobile-hint">Touch & drag to guide the </span><span>bird</span></div>
 <canvas id="three-canvas"></canvas>
 
 <!-- Sticky Sidebar with Real Logos + Action Buttons -->
@@ -702,16 +708,38 @@ document.addEventListener('mousemove', function(e) {
   targetBirdY = -bgMouseY * 4; // Range: -4 to +4
 });
 
+// Touch support for mobile bird control
+document.addEventListener('touchmove', function(e) {
+  if (e.touches.length > 0) {
+    var touch = e.touches[0];
+    bgMouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
+    bgMouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
+    targetBirdY = -bgMouseY * 4;
+  }
+}, {passive: true});
+
+document.addEventListener('touchstart', function(e) {
+  if (e.touches.length > 0) {
+    var touch = e.touches[0];
+    bgMouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
+    bgMouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
+    targetBirdY = -bgMouseY * 4;
+  }
+}, {passive: true});
+
 // Show hint after a delay
 setTimeout(function() {
   document.getElementById('birdHint').classList.add('visible');
 }, 3000);
 
-// Hide hint after first interaction
-document.addEventListener('mousemove', function hintHide() {
+// Hide hint after first interaction (mouse or touch)
+function hideHint() {
   document.getElementById('birdHint').classList.remove('visible');
-  document.removeEventListener('mousemove', hintHide);
-});
+  document.removeEventListener('mousemove', hideHint);
+  document.removeEventListener('touchstart', hideHint);
+}
+document.addEventListener('mousemove', hideHint);
+document.addEventListener('touchstart', hideHint);
 
 bgCamera.position.z = 5;
 
@@ -747,9 +775,19 @@ function animateBg() {
   // Clamp bird to screen bounds
   birdY = Math.max(-4.5, Math.min(4.5, birdY));
 
-  // Update bird position
+  // Update bird position - responsive across desktop and mobile
+  // Original desktop position x=-2 sits nicely in the left portion of the hero
+  // On mobile (narrow viewport), we shift it right so it stays visible
+  var aspect = window.innerWidth / window.innerHeight;
+  var baseBirdX = -2; // Original sweet spot for desktop
+  // For narrow/mobile viewports, shift right proportionally
+  if (aspect < 1.0) {
+    // Mobile portrait: shift from -2 toward -0.8 based on how narrow
+    var t = Math.max(0, (1.0 - aspect) / 0.5); // 0 at aspect=1.0, 1 at aspect=0.5
+    baseBirdX = -2 + t * 1.2; // Shifts to -0.8 on very narrow screens
+  }
   birdGroup.position.y = birdY;
-  birdGroup.position.x = -2; // Fixed X position (bird stays left, world moves right)
+  birdGroup.position.x = baseBirdX;
 
   // Bird tilt based on vertical velocity
   birdGroup.rotation.z = -birdVelocityY * 0.15;
