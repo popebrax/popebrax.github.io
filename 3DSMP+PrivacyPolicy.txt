@@ -1,0 +1,217 @@
+================================================================================
+3D SURROUND MUSIC PLAYER + — PRIVACY POLICY & TERMS OF USE
+================================================================================
+
+App Name:      3D Surround Music Player +
+Developer:     Braxton Otieno
+Contact:       otienobraxton6@gmail.com
+Effective Date: 1 January 2025
+Last Updated:  22 July 2026
+
+================================================================================
+ENGLISH VERSION
+================================================================================
+
+1. INTRODUCTION
+───────────────
+Welcome to 3D Surround Music Player + ("the App"). This Privacy Policy explains
+how Braxton Otieno ("Developer", "we", "us") handles your information when you
+use this App. We are committed to protecting your privacy and complying with
+applicable laws and regulations, including those of the People's Republic of
+China and relevant international standards.
+
+Please read this policy carefully before using the App. By tapping "Accept" in
+the App, you agree to the terms described herein.
+
+2. INFORMATION WE COLLECT
+──────────────────────────
+2.1 Information You Provide
+  • No account registration is required.
+  • You may optionally provide feedback or support requests via email.
+
+2.2 Information Collected Automatically
+  • Audio file metadata (title, artist, album, duration) stored locally on your
+    device — never uploaded to any server.
+  • Playback statistics (play counts, recently played) — stored locally only.
+  • App preferences and settings — stored locally using Android DataStore.
+
+2.3 Information We Do NOT Collect
+  • We do not collect your name, email address, phone number, location, or any
+    other personal identifier without your explicit consent.
+  • We do not collect, store, or transmit the actual audio files on your device.
+  • We do not run advertising SDKs.
+  • We do not use tracking technologies, cookies, or fingerprinting.
+
+3. PERMISSIONS AND WHY WE USE THEM
+────────────────────────────────────
+  • READ_MEDIA_AUDIO / READ_EXTERNAL_STORAGE — to access audio files stored on
+    your device for playback. Required for core functionality.
+  • FOREGROUND_SERVICE / FOREGROUND_SERVICE_MEDIA_PLAYBACK — to continue music
+    playback in the background and show a media notification. The foreground
+    service is started ONLY when you begin playing music. It is not started
+    silently or without your initiation. This directly addresses Huawei
+    AppGallery rule 2.19 regarding foreground services.
+  • RECORD_AUDIO — used solely for the in-app audio visualizer (real-time
+    waveform display). Requested only when you activate the visualizer. No audio
+    is recorded or stored.
+  • WAKE_LOCK — to prevent the CPU from sleeping during active playback.
+  • MODIFY_AUDIO_SETTINGS — to request audio focus and apply equalizer effects.
+  • POST_NOTIFICATIONS — to display media playback controls in the notification
+    bar (Android 13+).
+  • INTERNET — used only to fetch artist images from Last.fm (cover art only).
+    No personal data is transmitted.
+
+4. HOW WE USE YOUR INFORMATION
+────────────────────────────────
+  • To provide and improve the music playback experience.
+  • To remember your preferences (theme, equalizer settings, etc.).
+  • To display playback statistics within the App.
+
+We do not sell, rent, or share your data with any third party.
+
+5. DATA STORAGE AND SECURITY
+──────────────────────────────
+All data processed by this App is stored exclusively on your device. We do not
+operate any servers that receive or store user data. Standard Android OS
+security mechanisms protect your locally stored data.
+
+6. CHILDREN'S PRIVACY
+───────────────────────
+This App is not directed at children under the age of 14 (or the applicable age
+of consent in your jurisdiction). We do not knowingly collect personal
+information from children. If you believe a child has used this App and provided
+personal data, please contact us so we can address it.
+
+7. YOUR RIGHTS
+───────────────
+Since all data is stored locally on your device, you have full control:
+  • Delete all App data: Android Settings → Apps → 3D Surround Music Player + →
+    Clear Data.
+  • Revoke any permission: Android Settings → Apps → Permissions.
+  • Revoking storage permission will prevent the App from accessing your music
+    library.
+
+8. CHANGES TO THIS POLICY
+───────────────────────────
+We may update this Privacy Policy from time to time. When we do, we will update
+the "Last Updated" date at the top. If changes are significant, we will notify
+you through the App. Your continued use of the App after changes constitutes
+acceptance of the updated policy.
+
+9. CONTACT US
+──────────────
+Developer: Braxton Otieno
+Email:     otienobraxton6@gmail.com
+
+10. TERMS OF USE
+─────────────────
+  • This App is a local media player. It does not provide, host, distribute, or
+    stream any audio content.
+  • All audio files played through this App are files already stored on your
+    device. You are responsible for ensuring you have the legal right to access
+    and play those files.
+  • The App is provided "as is" without warranty of any kind. The Developer is
+    not liable for data loss or device issues arising from App use.
+  • Unauthorised reproduction, redistribution, or reverse engineering of this
+    App is prohibited.
+
+================================================================================
+中文版本（简体中文）
+CHINESE VERSION (SIMPLIFIED)
+================================================================================
+
+一、简介
+────────
+欢迎使用 3D环绕音乐播放器 +（以下简称"本应用"）。本隐私政策说明了开发者
+Braxton Otieno（以下简称"我们"）在您使用本应用期间如何处理您的信息。我们致力
+于保护您的隐私，并遵守中华人民共和国及其他相关地区的适用法律法规。
+
+请在使用本应用前仔细阅读本政策。点击应用内的"同意"按钮，即表示您已阅读、理
+解并接受本政策的全部条款。
+
+二、我们收集的信息
+────────────────────
+2.1 您主动提供的信息
+  • 本应用无需注册账户。
+  • 您可通过电子邮件自愿向我们发送反馈或支持请求。
+
+2.2 自动收集的信息
+  • 音频文件元数据（标题、艺术家、专辑、时长）——仅存储于您的设备本地，从不
+    上传至任何服务器。
+  • 播放统计信息（播放次数、最近播放）——仅存储于本地。
+  • 应用偏好设置——通过 Android DataStore 存储于本地。
+
+2.3 我们不收集的信息
+  • 我们不会在未经您明确同意的情况下收集您的姓名、电子邮件地址、电话号码、
+    位置信息或任何其他个人标识符。
+  • 我们不会收集、存储或传输您设备上的实际音频文件。
+  • 本应用不集成任何广告 SDK。
+  • 我们不使用追踪技术、Cookie 或设备指纹。
+
+三、权限说明
+────────────
+  • READ_MEDIA_AUDIO / READ_EXTERNAL_STORAGE（读取媒体音频/外部存储）——用于
+    访问您设备上存储的音频文件以进行播放，是核心功能所必需的权限。
+  • FOREGROUND_SERVICE / FOREGROUND_SERVICE_MEDIA_PLAYBACK（前台服务/媒体播放
+    前台服务）——用于在后台持续播放音乐并在通知栏显示媒体控制。仅在您主动开
+    始播放音乐时启动，不会在未经您操作的情况下静默启动。
+  • RECORD_AUDIO（录音）——仅用于应用内音频可视化功能（实时波形显示）。此权
+    限仅在您激活可视化器时申请，我们不录制或存储任何音频。
+  • WAKE_LOCK（唤醒锁定）——防止设备在主动播放期间进入休眠。
+  • MODIFY_AUDIO_SETTINGS（修改音频设置）——用于请求音频焦点和应用均衡器效果。
+  • POST_NOTIFICATIONS（发布通知）——用于在通知栏显示媒体播放控制（Android
+    13及以上）。
+  • INTERNET（互联网）——仅用于从 Last.fm 获取艺术家图片（封面图）。不传输
+    任何个人数据。
+
+四、信息使用目的
+────────────────
+  • 提供并改善音乐播放体验。
+  • 记住您的偏好设置（主题、均衡器设置等）。
+  • 在应用内显示播放统计信息（最多播放、最近播放）。
+
+我们不会出售、出租或以任何方式与任何第三方共享您的数据。
+
+五、数据存储与安全
+────────────────────
+本应用处理的所有数据均仅存储在您的设备本地。我们不运营任何接收或存储用户数
+据的服务器。您的本地存储数据受标准 Android 操作系统安全机制的保护。
+
+六、儿童隐私
+────────────
+本应用不面向14周岁以下（或您所在地区适用的同意年龄以下）的儿童。我们不会故
+意收集儿童的个人信息。如果您认为儿童使用了本应用并提供了个人数据，请联系我
+们以便处理。
+
+七、您的权利
+────────────
+由于所有数据均存储在您的设备本地，您拥有完全的控制权：
+  • 删除所有应用数据：Android 设置 → 应用 → 3D环绕音乐播放器 + → 清除数据。
+  • 撤销任何权限：Android 设置 → 应用 → 权限。
+  • 撤销存储权限将导致应用无法访问您的音乐库。
+
+八、政策变更
+────────────
+我们可能会不时更新本隐私政策。更新时，我们将修改顶部的"最后更新"日期。如有
+重大变更，我们将通过应用内通知告知您。在变更后继续使用本应用，即视为您接受
+更新后的政策。
+
+九、联系我们
+────────────
+开发者：Braxton Otieno
+邮箱：  otienobraxton6@gmail.com
+
+十、使用条款
+────────────
+  • 本应用是一款本地媒体播放器，不提供、托管、分发或流式传输任何音频内容。
+  • 通过本应用播放的所有音频文件均为已存储在您设备上的文件，您有责任确保您
+    拥有合法访问和播放这些文件的权利。
+  • 本应用按"现状"提供，不附带任何明示或暗示的保证。开发者不对因使用本应用
+    而造成的数据丢失或设备问题承担责任。
+  • 未经授权，禁止复制、再分发或逆向工程本应用。
+
+点击"同意"，即表示您确认已阅读、理解并同意本隐私政策与使用条款。
+
+================================================================================
+END OF PRIVACY POLICY / 隐私政策结束
+================================================================================
